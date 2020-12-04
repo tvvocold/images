@@ -10,16 +10,11 @@ ENV TZ Europe/Amsterdam
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime \
     && echo $TZ > /etc/timezone
 
-# Import archive signing keys and update packages
-RUN rpm --import https://sourceforge.net/projects/libjpeg-turbo/files/LJT-GPG-KEY \
-    && rpmkeys --import file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial \
-    && dnf update -y
 
 # Install the latest version of libjpeg-turbo,
 # since the version on CentOS is too old (v1.5.3)
 RUN dnf install -y dnf-utils \
-    && dnf config-manager --add-repo https://libjpeg-turbo.org/pmwiki/uploads/Downloads/libjpeg-turbo.repo \
-    && dnf install -y libjpeg-turbo-official \
+    && dnf install -y https://npm.taobao.org/mirrors/libjpeg-turbo/2.0.6/libjpeg-turbo-official-2.0.6.x86_64.rpm \
     && echo '/opt/libjpeg-turbo/lib64' >> /etc/ld.so.conf.d/libjpeg-turbo-official-x86_64.conf \
     && ldconfig
 
